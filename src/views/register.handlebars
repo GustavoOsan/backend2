@@ -1,0 +1,49 @@
+<div>
+    <h1>Registro</h1>
+    <form id="registerForm">
+        <label>Nombre</label>
+        <input name="first_name">
+        <br>
+        <label>Apellido</label>
+        <input name="last_name">
+        <br>
+        <label>Email</label>
+        <input name="email">
+        <br>
+        <label>Edad</label>
+        <input name="age">
+        <br>
+        <label>Contraseña</label>
+        <input name="password" type="password">
+        <br>
+        <input type="submit">
+    </form>
+    <p>¿Ya tienes cuenta? <a href="/login">Ingresa aquí</a></p>
+</div>
+
+<script>
+    const form = document.getElementById('registerForm');
+
+    form.addEventListener('submit', e => {
+        e.preventDefault();
+        const data = new FormData(form);
+        const obj = {};
+        data.forEach((value, key) => obj[key] = value);
+
+        fetch('/api/sessions/register', {
+            method: 'POST',
+            body: JSON.stringify(obj),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(result => result.json())
+        .then(json => {
+            if (json.status === 'success') {
+                window.location.replace('/login');
+            } else {
+                alert(json.message);
+            }
+        })
+    })
+</script>
